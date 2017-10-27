@@ -65,7 +65,7 @@ def write_shapefile(out_shp, cd, cs):
     ds = driver.CreateDataSource(out_shp)
     srs = osr.SpatialReference()
     srs.ImportFromWkt(cs) #Get the spatial reference from the input line
-    layer = ds.CreateLayer('', srs, ogr.wkbMultiLineString)
+    layer = ds.CreateLayer('', srs, ogr.wkbPolygon)
     layer.CreateField(ogr.FieldDefn('ID', ogr.OFTInteger))
     defn = layer.GetLayerDefn()
 
