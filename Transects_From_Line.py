@@ -132,20 +132,14 @@ def create_boxes(line, slice_width, overlap, edge_length, max_slice):
         xdif, ydif = abs(x0-x1),abs(y0-y1)
         #Add the buffer onto the ends...
         if not overlap == 0:
-            if y0 == y1:
-                x0, x1 = x0 - overlap, x1 + overlap
-            if x0 == x1:
-                y0, y1 = y0 - overlap, y1 + overlap
-            if m < 0:
-                alpha = math.tan(ydif/xdif)
-                ydist = math.sin(alpha) * overlap
-                xdist = math.cos(alpha) * overlap
-                x0, y0, x1, y1 = x0 - xdist, y0 + ydist, x1 + xdist, y1 - ydist
-            if m > 0:
-                alpha = math.tan(ydif/xdif)
-                ydist = math.sin(alpha) * overlap
-                xdist = math.cos(alpha) * overlap
-                x0, y0, x1, y1 = x0 - xdist, y0 - ydist, x1 + xdist, y1 + ydist
+            s = (overlap / slice_width) + 1 #Get scaling factor
+            x0_n = x0 * (1+s)/2 + x1 * (1-s)/2
+            y0_n = y0 * (1+s)/2 + y1 * (1-s)/2
+
+            x1_n = x1 * (1+s)/2 + x0 * (1-s)/2
+            y1_n = y1 * (1+s)/2 + y0 * (1-s)/2
+
+            x0, y0, x1, y1 = x0_n, y0_n, x1_n, y1_n
 
         #Get the bounding box using the slope of the line
         topx_l, topy_l, botx_l, boty_l = perp_pts(x0, y0, m, edge_length, [x0, y0, x1, y1])
